@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from .models import Question
 
 
@@ -33,7 +33,12 @@ def detail(request, question_id):
     :param question_id:
     :return:
     '''
-    question = Question.objects.get(pk=question_id)
+    try:
+        #question get() 시도
+        question = Question.objects.get(pk=question_id)
+    except Question.DoesNotExist:
+        raise Http404('Question does not exist')
+
     context = {
         'question' : question
     }
